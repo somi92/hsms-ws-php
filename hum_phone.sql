@@ -46,9 +46,10 @@ insert into HUMANITARNI_BROJ values (204,'Humanitarna akcija "65+ Pokret za brig
 insert into HUMANITARNI_BROJ values (205,'Humanitarna akcija "Srce za decu"','2552','100 din','Otvoren',2,'-',103);
 insert into HUMANITARNI_BROJ values (206,'Humanitarna akcija "Jedan u milion"','2112','100 din','Otvoren',2,'-',104);
 insert into HUMANITARNI_BROJ values (207,'Humanitarna akcija za pomoć u lečenju Une Savić','2205','100 din','Otvoren',1,'-',101);
+insert into HUMANITARNI_BROJ values (208,'Humanitarna akcija za pomoć u lečenju Vuka Lojkovića','7553','100 din','Otvoren',1,'-',101);
 
 select HB.hb_id, HB.opis, HB.broj, HB.cena, ORG.naziv, ORG.website, HB.prioritet, HB.napomena
-from HUMANITARNI_BROJ HB join ORGANIZACIJA ORG using (org_id)
+from HUMANITARNI_BROJ HB join ORGANIZACIJA ORG on (HB.org_id = ORG.org_id)
 order by HB.prioritet;
 
 ALTER DATABASE hsms_database
