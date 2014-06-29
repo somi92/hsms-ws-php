@@ -1,20 +1,12 @@
 <?php
 
     require_once 'nusoap-0.9.5/lib/nusoap.php';
-	
-	// echo "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"></meta>";	
-	// echo "<h1>HSMS Web Service</h1>";
-	
+
 	$service = new soap_server();
 	$namespace = "http://192.168.0.15/HSMSWebService/index.php";
 	$service -> wsdl -> schemaTargetNamespace = $namespace;
 	$service -> configureWSDL("ActionList");
-	// $service -> wsdl -> addComplexType("MyComplexType","complexType","struct","all","",
-									// array( "desc" => array("name" => "desc","type" => "xsd:string"),
-											// "num" => array("name" => "num","type" => "xsd:string"),
-											// "price" => array("name" => "price","type" => "xsd:string"),
-											// "org" => array("name" => "org","type" => "xsd:string"),
-											// "web" => array("name" => "web","type" => "xsd:string")));
+	
 	$service -> register("listAllActions",
 						array(),
 					    array("return" => "xsd:string"),
@@ -49,9 +41,11 @@
 		$actions = array();
 		
 		$sql_query = "select HB.hb_id, HB.opis, HB.broj, HB.cena, ORG.naziv, ORG.website ".
-					 "from HUMANITARNI_BROJ HB join ORGANIZACIJA ORG using (org_id) ".
-					 "order by HB.prioritet;";
+					 "from HUMANITARNI_BROJ HB join ORGANIZACIJA ORG on (HB.org_id = ORG.org_id); ";
+					 //"order by HB.prioritet;";
 		mysql_select_db($dbname);
+		
+		mysql_query ("SET NAMES 'utf8' COLLATE 'utf8_unicode_ci'");
 		
 		$result = mysql_query($sql_query, $conn);
 		if(!$result) 
@@ -69,11 +63,6 @@
 					"web" => $table_row["website"]);
 			$actions["action"][] = $hsms;
 		}
-		
-		// var_dump($actions);
-		
-		// echo "</br></br></br>";
-		// echo json_encode($actions);
 		
 		mysql_free_result($result);
 		mysql_close($conn);
