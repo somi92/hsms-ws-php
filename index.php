@@ -42,7 +42,7 @@
 		
 		$sql_query = "select HB.hb_id, HB.opis, HB.broj, HB.cena, ORG.naziv, ORG.website ".
 					 "from HUMANITARNI_BROJ HB join ORGANIZACIJA ORG on (HB.org_id = ORG.org_id); ";
-					 //"order by HB.prioritet;";
+					 "order by HB.prioritet;";
 		mysql_select_db($dbname);
 		
 		mysql_query ("SET NAMES 'utf8' COLLATE 'utf8_unicode_ci'");
