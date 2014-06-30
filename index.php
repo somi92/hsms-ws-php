@@ -1,9 +1,10 @@
 <?php
 
+	require_once 'config.php';
     require_once 'nusoap-0.9.5/lib/nusoap.php';
 
 	$service = new soap_server();
-	$namespace = "http://192.168.0.15/HSMSWebService/index.php";
+	$namespace = "http://192.168.1.181/HSMSWebService/index.php";
 	$service -> wsdl -> schemaTargetNamespace = $namespace;
 	$service -> configureWSDL("ActionList");
 	
@@ -19,12 +20,7 @@
 	
 	function listAllActions() {
 		
-		$dbhost = "localhost:3036";
-		$dbuser = "milos";
-		$dbpass = "Skydiving@1992";
-		$dbname = "hsms_database";
-		
-		$conn = mysql_connect($dbhost, $dbuser, $dbpass);
+		$conn = mysql_connect(DB_HOST, DB_USER, DB_PASS);
 	
 		if(!$conn) 
 		{
@@ -43,7 +39,7 @@
 		$sql_query = "select HB.hb_id, HB.opis, HB.broj, HB.cena, ORG.naziv, ORG.website ".
 					 "from HUMANITARNI_BROJ HB join ORGANIZACIJA ORG on (HB.org_id = ORG.org_id); ";
 					 "order by HB.prioritet;";
-		mysql_select_db($dbname);
+		mysql_select_db(DB_NAME);
 		
 		mysql_query ("SET NAMES 'utf8' COLLATE 'utf8_unicode_ci'");
 		
