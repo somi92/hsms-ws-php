@@ -1,32 +1,20 @@
 <?php
 
 	require_once 'config.php';
-    require_once 'nusoap-0.9.5/lib/nusoap.php';
+	require 'Slim/Slim.php';
+	\Slim\Slim::registerAutoloader();
+	header('Content-type: text/plain; charset=utf-8');
+	
+	$app = new \Slim\Slim();
 
-	$service = new soap_server();
-	$namespace = "http://192.168.1.181/HSMSWebService/index.php";
-	$service -> wsdl -> schemaTargetNamespace = $namespace;
-	$service -> configureWSDL("ActionList");
-	
-	$service -> register("listAllActions",
-						array(),
-					    array("return" => "xsd:string"),
-					    "urn:ActionList",
-					    "urn:ActionList#listAllActions",
-					    "rpc",
-					    "literal",
-					    "Get a listing of actions");
-	$service -> service($HTTP_RAW_POST_DATA);
-	
-	function listAllActions() {
-		
-		$conn = mysql_connect(DB_HOST, DB_USER, DB_PASS);
+	$app->get('/listAllActions', function() use ($app) {
+
+    		$conn = mysql_connect(DB_HOST, DB_USER, DB_PASS);
 	
 		if(!$conn) 
 		{
 			die("Could not connect: " . mysql_error());
 		}
-		// echo "Connected successfully!\n";
 		
 		$hsms = array(
 				"desc" => "",
@@ -63,7 +51,8 @@
 		mysql_free_result($result);
 		mysql_close($conn);
 		
-		return json_encode($actions);
-	}
+		echo utf8_encode(json_encode($actions));
+	});
 	
+	$app -> run();
 ?>
