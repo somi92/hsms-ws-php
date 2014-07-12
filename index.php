@@ -1,6 +1,6 @@
 <?php
 
-	require_once 'config.php';
+	require 'config.php';
 	require 'Slim/Slim.php';
 	\Slim\Slim::registerAutoloader();
 	header('Content-type: text/plain; charset=utf-8');
@@ -51,7 +51,8 @@
 		mysql_free_result($result);
 		mysql_close($conn);
 		
-		echo utf8_encode(json_encode($actions));
+		//echo utf8_encode(json_encode($actions));
+		echo json_encode($actions);
 	});
 	
 	$app -> run();
